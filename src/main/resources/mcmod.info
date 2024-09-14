@@ -1,0 +1,16 @@
+[
+{
+  "modid": "gnd",
+  "name": "GND - GUI Node Designer",
+  "description": "GND is a Node based GUI design library",
+  "version": "1",
+  "mcversion": "1.8.9",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["azazeldev"],
+  "credits": "The Forge and FML guys, for making the example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
