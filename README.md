@@ -1,6 +1,6 @@
 <div align="center">
   
-<img src="https://github.com/user-attachments/assets/33a941a2-087e-48e3-a1bd-e5db8d2118d1" height="500px" />
+<img src="https://github.com/user-attachments/assets/33a941a2-087e-48e3-a1bd-e5db8d2118d1" height="220px" />
 
 <h2> GND </h2>
 <h3>*G*UI *N*ode *D*esigner
