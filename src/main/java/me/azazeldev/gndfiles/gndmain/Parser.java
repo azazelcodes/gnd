@@ -1,112 +1,129 @@
-/*     */ package me.azazeldev.gndfiles.gndmain;
-/*     */ 
-/*     */ import java.io.BufferedReader;
-/*     */ import java.io.FileReader;
-/*     */ import java.io.IOException;
-/*     */ import java.util.ArrayList;
-/*     */ import java.util.HashMap;
-/*     */ import java.util.List;
-/*     */ import java.util.Map;
-/*     */ import java.util.Stack;
-/*     */ 
-/*     */ public class Parser {
-/*     */   public static Map<String, String> variables;
-/*     */   
-/*     */   public static Map<Node, Map<Integer, String>> replacedProperties;
-/*     */   
-/*     */   public static Map<String, Node> parseFile(String filename) throws IOException {
-/*  14 */     variables.put("mouseX", "0");
-/*  15 */     variables.put("mouseY", "0");
-/*  17 */     BufferedReader reader = new BufferedReader(new FileReader(filename));
-/*  18 */     Map<String, Node> nodeMap = new HashMap<>();
-/*  19 */     Stack<Node> stack = new Stack<>();
-/*     */     String line;
-/*  22 */     while ((line = reader.readLine()) != null) {
-/*  23 */       line = line.trim();
-/*  24 */       if (line.startsWith("/")) {
-/*  25 */         stack.pop();
-/*     */         continue;
-/*     */       } 
-/*  26 */       if (line.startsWith("$")) {
-/*  27 */         String[] properties = line.split(" = ");
-/*  28 */         variables.put(properties[0], properties[1]);
-/*     */         continue;
-/*     */       } 
-/*  30 */       String nodeName = line.substring(0, line.indexOf('('));
-/*  31 */       Node node = getLine(line, nodeName);
-/*  32 */       if (!stack.isEmpty()) {
-/*  33 */         stack.peek().addChild(node);
-/*     */       } else {
-/*  35 */         nodeMap.put(nodeName, node);
-/*     */       } 
-/*  37 */       stack.push(node);
-/*     */     } 
-/*  41 */     reader.close();
-/*  42 */     return nodeMap;
-/*     */   }
-/*     */   
-/*     */   private static Node getLine(String line, String nodeName) {
-/*  46 */     String[] properties = line.substring(line.indexOf('(') + 1, line.indexOf(')')).split(", ");
-/*  47 */     Map<Integer, String> tempReplaced = new HashMap<>();
-/*  48 */     int i = 0;
-/*  49 */     for (String property : properties) {
-/*  50 */       if (property.contains("$")) {
-/*  51 */         int csIndex = Math.min(line.indexOf(','), line.indexOf(' '));
-/*  52 */         String targetVar = variables.get(line.substring(line.indexOf('$') + 1, (csIndex == -1) ? line.length() : csIndex));
-/*  53 */         line.replace(property, targetVar);
-/*  54 */         tempReplaced.put(i, targetVar);
-/*     */       } 
-/*  56 */       i++;
-/*     */     } 
-/*  58 */     float x = Float.parseFloat(properties[0]);
-/*  59 */     float y = Float.parseFloat(properties[1]);
-/*  60 */     float width = Float.parseFloat(properties[2]);
-/*  61 */     float height = Float.parseFloat(properties[3]);
-/*  62 */     int color = Integer.decode(properties[4]);
-/*  63 */     int radius = Integer.decode(properties[5]);
-/*  64 */     boolean scrollable = Boolean.parseBoolean(properties[6]);
-/*  66 */     Node node = new Node(nodeName, x, y, width, height, color, radius, scrollable);
-/*  67 */     for (Map.Entry<Integer, String> entry : tempReplaced.entrySet()) {
-/*  68 */       Map<Integer, String> newMap = new HashMap<>();
-/*  69 */       newMap.put(entry.getKey(), entry.getValue());
-/*  71 */       replacedProperties.put(node, newMap);
-/*     */     } 
-/*  73 */     return node;
-/*     */   }
-/*     */   
-/*     */   public static List<Node> collectAllNodes(Map<String, Node> nodeMap) {
-/*  77 */     List<Node> allNodes = new ArrayList<>();
-/*  78 */     for (Node node : nodeMap.values())
-/*  79 */       traverseNodes(node, allNodes); 
-/*  81 */     return allNodes;
-/*     */   }
-/*     */   
-/*     */   private static void traverseNodes(Node node, List<Node> allNodes) {
-/*  85 */     allNodes.add(node);
-/*  86 */     for (Node child : node.children)
-/*  87 */       traverseNodes(child, allNodes); 
-/*     */   }
-/*     */   
-/*     */   public static void setVariable(String variable, String value) {
-/*  92 */     if (variables.containsKey(variable)) {
-/*  93 */       variables.replace(variable, value);
-/*     */     } else {
-/*  95 */       System.out.println("Not a valid variable to replace");
-/*     */     } 
-/*     */   }
-/*     */   
-/*     */   public static void reparseVariables() {
-/* 100 */     for (Map.Entry<Node, Map<Integer, String>> nodeEntry : replacedProperties.entrySet()) {
-/* 101 */       Node node = nodeEntry.getKey();
-/* 102 */       Map<Integer, String> properties = nodeEntry.getValue();
-/* 104 */       for (Map.Entry<Integer, String> propertyEntry : properties.entrySet()) {
-/* 105 */         Integer propertyKey = propertyEntry.getKey();
-/* 106 */         String propertyValue = propertyEntry.getValue();
-/* 108 */         node.replaceProperty(propertyKey, propertyValue);
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ }
+package me.azazeldev.gndfiles.gndmain;
+
+import me.azazeldev.gndfiles.gndmain.types.Node;
+import me.azazeldev.gndfiles.gndmain.types.Scrollable;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+public class Parser {
+    public static Map<String, String> variables;
+    public static Map<Node, Map<Integer, String>> replacedProperties;
+
+    // Initially parse a full file
+    public static Map<String, Node> parseFile(String filename) throws IOException {
+        // Base for mouse positions
+        variables.put("mouseX", "0");
+        variables.put("mouseY", "0");
+        // Iterate file
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        Map<String, Node> nodeMap = new HashMap<>();
+        Stack<Node> stack = new Stack<>();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+            // Node end
+            if (line.startsWith("/")) {
+                stack.pop();
+                continue;
+            }
+            // Variable definition
+            if (line.startsWith("$")) {
+                String[] properties = line.split(" = ");
+                variables.put(properties[0], properties[1]);
+                continue;
+            }
+            // Get node name and parse it
+            String nodeName = line.substring(0, line.indexOf('('));
+            Node node = getLine(line, nodeName);
+            // Add as child if not standalone
+            if (!stack.isEmpty()) {
+                stack.peek().addChild(node);
+            } else {
+                nodeMap.put(nodeName, node);
+            }
+            stack.push(node);
+        }
+        reader.close();
+        return nodeMap;
+    }
+
+    private static Node getLine(String line, String nodeName) {
+        // Parse properties
+        String[] properties = line.substring(line.indexOf('(') + 1, line.indexOf(')')).split(", ");
+        Map<Integer, String> tempReplaced = new HashMap<>();
+        int i = 0;
+        for (String property : properties) {
+            // Check for variable
+            if (property.contains("$")) {
+                int csIndex = Math.min(line.indexOf(','), line.indexOf(' '));
+                String targetVar = variables.get(line.substring(line.indexOf('$') + 1, (csIndex == -1) ? line.length() : csIndex));
+                line.replace(property, targetVar);
+                tempReplaced.put(i, targetVar);
+            }
+            i++;
+        }
+        // Map to node properties
+        String type = nodeName.substring(0, 1);
+        nodeName = nodeName.substring(1);
+        Node node;
+        switch (type) {
+            case ".":
+                // Fall through to default (blank node)
+            case "@":
+                node = Scrollable.parse(nodeName, properties);
+                break;
+            default:
+                node = Node.parse(nodeName, properties);
+                break;
+        }
+        for (Map.Entry<Integer, String> entry : tempReplaced.entrySet()) {
+            Map<Integer, String> newMap = new HashMap<>();
+            newMap.put(entry.getKey(), entry.getValue());
+            replacedProperties.put(node, newMap);
+        }
+        return node;
+    }
+
+    public static List<Node> collectAllNodes(Map<String, Node> nodeMap) {
+        List<Node> allNodes = new ArrayList<>();
+        for (Node node : nodeMap.values())
+            traverseNodes(node, allNodes);
+        return allNodes;
+    }
+
+    private static void traverseNodes(Node node, List<Node> allNodes) {
+        allNodes.add(node);
+        for (Node child : node.children)
+            traverseNodes(child, allNodes);
+    }
+
+    public static void setVariable(String variable, String value) {
+        if (variables.containsKey(variable)) {
+            variables.replace(variable, value);
+        } else {
+            System.out.println("Not a valid variable to replace");
+        }
+    }
+
+    public static void reparseVariables() {
+        for (Map.Entry<Node, Map<Integer, String>> nodeEntry : replacedProperties.entrySet()) {
+            Node node = nodeEntry.getKey();
+            Map<Integer, String> properties = nodeEntry.getValue();
+            for (Map.Entry<Integer, String> propertyEntry : properties.entrySet()) {
+                Integer propertyKey = propertyEntry.getKey();
+                String propertyValue = propertyEntry.getValue();
+                node.replaceProperty(propertyKey, propertyValue);
+            }
+        }
+    }
+}
 
 
 /*
