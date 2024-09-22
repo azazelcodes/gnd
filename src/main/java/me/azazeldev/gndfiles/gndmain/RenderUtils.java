@@ -7,6 +7,9 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
+    // Made  by somebody way smarter than me @ https://github.com/ZannaSkull/VapeLite-ClickGui
+    // Altered by me @ https://github.com/azazelcodes
+
     public static void glColor(int hex) {
         float alpha = (hex >> 24 & 0xFF) / 255.0F;
         float red = (hex >> 16 & 0xFF) / 255.0F;
