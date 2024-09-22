@@ -33,11 +33,11 @@ public class Clickable extends Node {
         return new Clickable(nodeName, x, y, width, height, color, radius, mName, argumentList);
     }
 
-    public void run(String methodName, List<String> args) {
-        Consumer<List<String>> method = methodMap.get(methodName);
+    public void run() {
+        Consumer<List<String>> method = methodMap.get(this.methodName);
 
         if (method != null) {
-            method.accept(args); // Run method with args
+            method.accept(this.methodArgs); // Run method with args
         } else {
             System.out.println("Method not found");
         }

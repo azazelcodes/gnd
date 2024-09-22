@@ -78,6 +78,10 @@ public class Node {
         return new Node(nodeName, x, y, width, height, color, radius);
     }
 
+    public boolean intersects(float x, float y) {
+        return this.x <= x && x <= this.x + this.width && this.y <= y && y <= this.y + this.height;
+    }
+
     public String toString() {
         return "Node{name='" + this.name + '\'' + ", x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height=" + this.height + ", color=" + this.color + ", radius=" + this.radius + ", isChild=" + isChild() + ", children=" + this.children + '}';
     }

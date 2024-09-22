@@ -1,10 +1,14 @@
 package me.azazeldev.gndfiles.gui;
 
 import java.io.IOException;
+
 import me.azazeldev.gndfiles.Main;
 import me.azazeldev.gndfiles.gndmain.Drawer;
 import me.azazeldev.gndfiles.gndmain.Parser;
 import me.azazeldev.gndfiles.gndmain.RenderUtils;
+import me.azazeldev.gndfiles.gndmain.types.Clickable;
+import me.azazeldev.gndfiles.gndmain.types.Node;
+import me.azazeldev.gndfiles.gndmain.types.Scrollable;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.MinecraftForge;
@@ -12,8 +16,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 
 public class GUI extends GuiScreen {
-    public int scrollVar;
-
     public GUI() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -33,13 +35,22 @@ public class GUI extends GuiScreen {
         Parser.setVariable("mouseX", String.valueOf(mouseX));
         Parser.setVariable("mouseY", String.valueOf(mouseY));
         Parser.reparseVariables();
-        Drawer.draw(Main.nodeMap, this.mc, sr, this.scrollVar);
+        Drawer.draw(Main.nodeMap, this.mc, sr);
     }
 
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        int wheelState = Mouse.getEventDWheel();
-        if (wheelState != 0)
-            this.scrollVar += (wheelState > 0) ? -8 : 8;
+        for (Node a : Drawer.actionables) {
+            if (a.intersects(Mouse.getX(), Mouse.getY())) {
+                if (a instanceof Scrollable) {
+                    int wheelState = Mouse.getEventDWheel();
+                    if (wheelState != 0)
+                        ((Scrollable) a).scrollProgress += (wheelState > 0) ? -8 : 8;
+                }
+                if (a instanceof Clickable)
+                    if (Mouse.isButtonDown(1))
+                        ((Clickable) a).run();
+            }
+        }
     }
 }
