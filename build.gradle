@@ -95,5 +95,5 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 version = "0.0.0"
-group= "me.rayorsomething.template" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "templatemod"
+group= "me.azazeldev.gnd" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "gnd"
