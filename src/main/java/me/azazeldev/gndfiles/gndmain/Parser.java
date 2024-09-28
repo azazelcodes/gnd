@@ -1,5 +1,6 @@
 package me.azazeldev.gndfiles.gndmain;
 
+import me.azazeldev.gndfiles.gndmain.types.Clickable;
 import me.azazeldev.gndfiles.gndmain.types.Node;
 import me.azazeldev.gndfiles.gndmain.types.Scrollable;
 
@@ -78,6 +79,9 @@ public class Parser {
                 // Fall through to default (blank node)
             case "@":
                 node = Scrollable.parse(nodeName, properties);
+                break;
+            case "!":
+                node = Clickable.parse(nodeName, properties);
                 break;
             default:
                 node = Node.parse(nodeName, properties);

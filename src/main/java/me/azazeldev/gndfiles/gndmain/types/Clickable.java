@@ -27,7 +27,7 @@ public class Clickable extends Node {
         int radius = Integer.decode(properties[5]);
         // Get name and args from string
         String mName = properties[6].substring(0, properties[6].indexOf('(')); // abc
-        String arguments = properties[6].substring(properties[6].indexOf('(') + 1, properties[6].lastIndexOf(')')); // arg1,arg2,arg3
+        String arguments = properties[6].substring(properties[6].indexOf('[') + 1, properties[6].lastIndexOf(']')); // arg1,arg2,arg3
         List<String> argumentList = new ArrayList<>(Arrays.asList(arguments.split(",")));
 
         return new Clickable(nodeName, x, y, width, height, color, radius, mName, argumentList);
