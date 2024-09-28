@@ -11,23 +11,18 @@ See https://gist.github.com/TheCurle/fe7ad3ede188cbdd15c235cc75d52d4a for more i
 :apiClasses UP-TO-DATE
 :sourceMainJava
 :compileJava
-:processResources
+:processResources UP-TO-DATE
 :classes
 :jar
-:sourceTestJava
+:sourceTestJava UP-TO-DATE
 :compileTestJava UP-TO-DATE
 :processTestResources UP-TO-DATE
 :testClasses UP-TO-DATE
 :test UP-TO-DATE
-:extractMcpData
-Download https://maven.minecraftforge.net/de/oceanlabs/mcp/mcp/1.8.9/mcp-1.8.9-srg.zip
 :extractMcpData SKIPPED
-:extractMcpMappings
-Download https://maven.minecraftforge.net/de/oceanlabs/mcp/mcp_stable/20-1.8.8/mcp_stable-20-1.8.8.zip
 :extractMcpMappings SKIPPED
 :getVersionJson
-:extractUserdev
-Download https://maven.minecraftforge.net/net/minecraftforge/forge/1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-userdev.jar
+:extractUserdev UP-TO-DATE
 :genSrgs SKIPPED
 :reobfJar
 :shadowJar
@@ -43,4 +38,4 @@ remapping source...
 
 BUILD SUCCESSFUL
 
-Total time: 16.303 secs
+Total time: 12.495 secs

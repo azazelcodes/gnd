@@ -19,10 +19,10 @@ public class Main {
 
     @net.minecraftforge.fml.common.Mod.EventHandler
     public void init(FMLInitializationEvent event) throws IOException {
-        ProgressManager.ProgressBar progressBar = ProgressManager.push("CoinUI", 2);
+        ProgressManager.ProgressBar progressBar = ProgressManager.push("gnd", 2);
         instance = this;
         l = LogManager.getLogger();
-        nodeMap = Parser.parseFile("test.gnd");
+        nodeMap = Parser.parseFile("example.gnd");
         ClientCommandHandler.instance.registerCommand(commandManager);
         progressBar.step("Initializing GUI");
         ProgressManager.pop(progressBar);
