@@ -10,7 +10,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
 public class Drawer {
-    public static List<Node> actionables;
+    public static List<Node> actionables = new ArrayList<>();
     public static void draw(Node n, Minecraft mc, ScaledResolution sr) {
         // Create a List of all actionables to check for clicking them
         if (n instanceof Clickable || n instanceof Scrollable) actionables.add(n);
@@ -35,7 +35,9 @@ public class Drawer {
     }
 
     public static void draw(Map<String, Node> nodeMap, Minecraft mc, ScaledResolution sr) {
-        actionables.clear();
+        if (!actionables.isEmpty()) {
+            actionables.clear();
+        }
         for (Node n : nodeMap.values()) {
             draw(n, mc, sr);
         }

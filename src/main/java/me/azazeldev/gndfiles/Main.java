@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "", useMetadata = true)
+@Mod(modid = "gndex", useMetadata = true)
 public class Main {
     public static Main instance;
     public static Command commandManager = new Command();
