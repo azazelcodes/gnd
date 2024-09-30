@@ -5,6 +5,7 @@ import me.azazeldev.gndfiles.gndmain.types.Node;
 import me.azazeldev.gndfiles.gndmain.types.Scrollable;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,12 +19,12 @@ public class Parser {
     public static Map<Node, Map<Integer, String>> replacedProperties;
 
     // Initially parse a full file
-    public static Map<String, Node> parseFile(String filename) throws IOException {
+    public static Map<String, Node> parseFile(File file) throws IOException {
         // Base for mouse positions
         variables.put("mouseX", "0");
         variables.put("mouseY", "0");
         // Iterate file
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        BufferedReader reader = new BufferedReader(new FileReader(file));
         Map<String, Node> nodeMap = new HashMap<>();
         Stack<Node> stack = new Stack<>();
         String line;

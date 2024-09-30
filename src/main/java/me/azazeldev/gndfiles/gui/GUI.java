@@ -27,6 +27,15 @@ public class GUI extends GuiScreen {
             Main.l.error("Error initializing Anti-Aliasing, continuing...");
         }
         Main.l.info("Init");
+
+
+        if (Main.test) {
+            try {
+                Main.nodeMap = Parser.parseFile(MConfig.mconfig);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
