@@ -25,13 +25,14 @@ public class Main {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) throws IOException {
-        ProgressManager.ProgressBar progressBar = ProgressManager.push("gnd", 2);
+        ProgressManager.ProgressBar progressBar = ProgressManager.push("gndex", 2);
+        progressBar.step("Setting up mod...");
         instance = this;
         l = LogManager.getLogger();
+        progressBar.step("Setting up GUI...");
         MConfig.init();
         nodeMap = Parser.parseFile(MConfig.mconfig);
         ClientCommandHandler.instance.registerCommand(commandManager);
-        progressBar.step("Initializing GUI");
         ProgressManager.pop(progressBar);
     }
 }
