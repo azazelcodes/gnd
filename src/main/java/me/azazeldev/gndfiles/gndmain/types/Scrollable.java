@@ -15,7 +15,7 @@ public class Scrollable extends Node {
         float y = Float.parseFloat(properties[1]);
         float width = Float.parseFloat(properties[2]);
         float height = Float.parseFloat(properties[3]);
-        int color = Integer.decode(properties[4]);
+        int color = (int) Long.parseLong(properties[4], 16); // Parse HEX to INT (e.x. FF000000 for black)
         int radius = Integer.decode(properties[5]);
         int scrollDir = Integer.decode(properties[6]);
         return new Scrollable(nodeName, x, y, width, height, color, radius, scrollDir, 0);

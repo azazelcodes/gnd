@@ -16,6 +16,9 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 
 public class GUI extends GuiScreen {
+    private int mx;
+    private int my;
+
     public GUI() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -26,12 +29,12 @@ public class GUI extends GuiScreen {
         } catch (LWJGLException e) {
             Main.l.error("Error initializing Anti-Aliasing, continuing...");
         }
-        Main.l.info("Init");
 
 
         if (Main.test) {
             try {
                 Main.nodeMap = Parser.parseFile(MConfig.mconfig);
+                Main.l.info(Main.nodeMap.toString());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -39,6 +42,11 @@ public class GUI extends GuiScreen {
     }
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        // Keep mouse pos updated.
+        mx = mouseX;
+        my = mouseY;
+
         drawWorldBackground(0);
         ScaledResolution sr = new ScaledResolution(this.mc);
         Parser.setVariable("mouseX", String.valueOf(mouseX));
@@ -50,12 +58,13 @@ public class GUI extends GuiScreen {
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         for (Node a : Drawer.actionables) {
-            if (a.intersects(Mouse.getX(), Mouse.getY())) {
+            if (a.intersects(mx, my)) {
                 if (a instanceof Scrollable) {
                     int wheelState = Mouse.getEventDWheel();
                     if (wheelState != 0)
                         ((Scrollable) a).scrollProgress += (wheelState > 0) ? -8 : 8;
                 }
+                Main.l.info(a.name);
                 if (a instanceof Clickable)
                     if (Mouse.isButtonDown(1))
                         ((Clickable) a).run();

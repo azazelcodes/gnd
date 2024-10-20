@@ -1,6 +1,5 @@
 package me.azazeldev.gndfiles.gndmain;
 
-import me.azazeldev.gndfiles.Main;
 import me.azazeldev.gndfiles.gndmain.types.Clickable;
 import me.azazeldev.gndfiles.gndmain.types.Node;
 import me.azazeldev.gndfiles.gndmain.types.Scrollable;
@@ -42,7 +41,6 @@ public class Parser {
             if (!line.isEmpty() && !line.trim().isEmpty()) {
                 // Get node name and parse it
                 String nodeName = line.substring(0, line.indexOf('('));
-                Main.l.info(line);
                 Node node = getLine(line, nodeName);
                 // Add as child if not standalone
                 if (!stack.isEmpty()) {
@@ -75,9 +73,7 @@ public class Parser {
             i++;
         }
         // Reparse properties to include updated variables
-        Main.l.info(Arrays.toString(properties));
         properties = line.substring(line.indexOf('(') + 1, line.indexOf(')')).split(", ");
-        Main.l.info(Arrays.toString(properties));
         // Map to node properties
         String type = nodeName.substring(0, 1);
         nodeName = nodeName.substring(1);

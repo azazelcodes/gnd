@@ -2,6 +2,7 @@ package me.azazeldev.gndfiles.gndmain;
 
 import java.util.*;
 
+import me.azazeldev.gndfiles.Main;
 import me.azazeldev.gndfiles.gndmain.types.Clickable;
 import me.azazeldev.gndfiles.gndmain.types.Node;
 import me.azazeldev.gndfiles.gndmain.types.Scrollable;

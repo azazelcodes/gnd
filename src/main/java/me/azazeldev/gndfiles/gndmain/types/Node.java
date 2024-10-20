@@ -1,5 +1,7 @@
 package me.azazeldev.gndfiles.gndmain.types;
 
+import me.azazeldev.gndfiles.Main;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,12 +75,16 @@ public class Node {
         float y = Float.parseFloat(properties[1]);
         float width = Float.parseFloat(properties[2]);
         float height = Float.parseFloat(properties[3]);
-        int color = Integer.decode(properties[4]);
+        int color = (int) Long.parseLong(properties[4], 16); // Parse HEX to INT (e.x. FF000000 for black)
         int radius = Integer.decode(properties[5]);
         return new Node(nodeName, x, y, width, height, color, radius);
     }
 
     public boolean intersects(float x, float y) {
+        if (Main.test) {
+            Main.l.info("(X|Y) " + x + " | " + y + "; Node v");
+            Main.l.info(this.toString());
+        }
         return this.x <= x && x <= this.x + this.width && this.y <= y && y <= this.y + this.height;
     }
 

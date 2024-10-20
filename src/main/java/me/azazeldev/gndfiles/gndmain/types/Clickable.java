@@ -23,7 +23,7 @@ public class Clickable extends Node {
         float y = Float.parseFloat(properties[1]);
         float width = Float.parseFloat(properties[2]);
         float height = Float.parseFloat(properties[3]);
-        int color = Integer.decode(properties[4]);
+        int color = (int) Long.parseLong(properties[4], 16); // Parse HEX to INT (e.x. FF000000 for black)
         int radius = Integer.decode(properties[5]);
         // Get name and args from string
         String mName = properties[6].substring(0, properties[6].indexOf('[')); // abc
