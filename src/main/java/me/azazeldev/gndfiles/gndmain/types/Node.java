@@ -39,34 +39,28 @@ public class Node {
     }
 
     public void replaceProperty(int index, String value) {
-        try {
-            switch (index) {
-                case 0:
-                    this.name = value;
-                    break;
-                case 1:
-                    this.x = Float.parseFloat(value);
-                    break;
-                case 2:
-                    this.y = Float.parseFloat(value);
-                    break;
-                case 3:
-                    this.width = Float.parseFloat(value);
-                    break;
-                case 4:
-                    this.height = Float.parseFloat(value);
-                    break;
-                case 5:
-                    this.color = Integer.parseInt(value);
-                    break;
-                case 6:
-                    this.radius = Integer.parseInt(value);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid index: " + index);
-            }
-        } catch (NumberFormatException e) {
-            System.err.println("Error parsing value: " + value);
+        switch (index) {
+            case 0:
+                this.x = Float.parseFloat(value);
+                break;
+            case 1:
+                this.y = Float.parseFloat(value);
+                break;
+            case 2:
+                this.width = Float.parseFloat(value);
+                break;
+            case 3:
+                this.height = Float.parseFloat(value);
+                break;
+            case 4:
+                this.color = Integer.parseInt(value);
+                break;
+            case 5:
+                this.radius = Integer.parseInt(value);
+                break;
+            default:
+                Main.l.info("Invalid case number.");
+                break;
         }
     }
 

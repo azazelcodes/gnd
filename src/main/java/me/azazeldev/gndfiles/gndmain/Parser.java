@@ -1,5 +1,6 @@
 package me.azazeldev.gndfiles.gndmain;
 
+import me.azazeldev.gndfiles.Main;
 import me.azazeldev.gndfiles.gndmain.types.Clickable;
 import me.azazeldev.gndfiles.gndmain.types.Node;
 import me.azazeldev.gndfiles.gndmain.types.Scrollable;
@@ -96,20 +97,8 @@ public class Parser {
             newMap.put(entry.getKey(), entry.getValue());
             replacedProperties.put(node, newMap);
         }
+        Main.l.info(node);
         return node;
-    }
-
-    public static List<Node> collectAllNodes(Map<String, Node> nodeMap) {
-        List<Node> allNodes = new ArrayList<>();
-        for (Node node : nodeMap.values())
-            traverseNodes(node, allNodes);
-        return allNodes;
-    }
-
-    private static void traverseNodes(Node node, List<Node> allNodes) {
-        allNodes.add(node);
-        for (Node child : node.children)
-            traverseNodes(child, allNodes);
     }
 
     public static void setVariable(String variable, String value) {
@@ -127,14 +116,9 @@ public class Parser {
             for (Map.Entry<Integer, String> propertyEntry : properties.entrySet()) {
                 Integer propertyKey = propertyEntry.getKey();
                 String propertyValue = propertyEntry.getValue();
+                Main.l.info(node.toString() + "; rep: " + propertyKey.toString() + " W " + propertyValue);
                 node.replaceProperty(propertyKey, propertyValue);
             }
         }
     }
 }
-
-
-/*
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.2.26
- */
