@@ -43,8 +43,8 @@ public class NodeScreen extends GuiScreen {
 
         drawWorldBackground(0);
         ScaledResolution sr = new ScaledResolution(this.mc);
-        Parser.setVariable("mouseX", String.valueOf(mouseX));
-        Parser.setVariable("mouseY", String.valueOf(mouseY));
+        Parser.setVariable("mouseX", String.valueOf(mx));
+        Parser.setVariable("mouseY", String.valueOf(my));
         Parser.reparseVariables();
         Drawer.draw(Main.nodeMap, this.mc, sr);
     }

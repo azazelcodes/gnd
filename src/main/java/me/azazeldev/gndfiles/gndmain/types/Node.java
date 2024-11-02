@@ -29,8 +29,6 @@ public class Node {
 
     public void addChild(Node child) {
         child.parent = this;
-        child.x += this.x;
-        child.y += this.y;
         this.children.add(child);
     }
 

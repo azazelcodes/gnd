@@ -25,10 +25,11 @@ public class Drawer {
             RenderUtils.drawCircle(n.x, n.y, (n.width + n.height) / 2.0F, n.color);
         } else {
             // this is messy but a oneliner. if needed separate into a scrollProgress local var
-            RenderUtils.drawRoundedRect(n.x + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 1 ? ((Scrollable) n).scrollProgress : 0),
-                    n.y + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 0 ? ((Scrollable) n).scrollProgress : 0),
-                    n.x + n.width + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 1 ? ((Scrollable) n).scrollProgress : 0),
-                    n.y + n.height + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 0 ? ((Scrollable) n).scrollProgress : 0),
+            RenderUtils.drawRoundedRect(
+                    n.x + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 1 ? ((Scrollable) n).scrollProgress : 0) + (n.isChild() ? n.parent.x + (n.parent instanceof Scrollable && ((Scrollable) n.parent).scrollDir == 1 ? ((Scrollable) n.parent).scrollProgress : 0) : 0), // x + scrollProgress + parentX + parentScrollProgress
+                    n.y + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 0 ? ((Scrollable) n).scrollProgress : 0) + (n.isChild() ? n.parent.y + (n.parent instanceof Scrollable && ((Scrollable) n.parent).scrollDir == 0 ? ((Scrollable) n.parent).scrollProgress : 0) : 0), // ^ same but y
+                    n.x + n.width + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 1 ? ((Scrollable) n).scrollProgress : 0) + (n.isChild() ? n.parent.x + (n.parent instanceof Scrollable && ((Scrollable) n.parent).scrollDir == 1 ? ((Scrollable) n.parent).scrollProgress : 0) : 0),  // x + width + scrollProgress + parentX + parentScrollProgress
+                    n.y + n.height + (n instanceof Scrollable && ((Scrollable) n).scrollDir == 0 ? ((Scrollable) n).scrollProgress : 0) + (n.isChild() ? n.parent.y + (n.parent instanceof Scrollable && ((Scrollable) n.parent).scrollDir == 0 ? ((Scrollable) n.parent).scrollProgress : 0) : 0), // ^ same but y & height
                     n.radius, n.color);
         }
 
