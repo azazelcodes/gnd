@@ -2,6 +2,7 @@ package me.azazeldev.gndfiles.gndmain;
 
 import me.azazeldev.gndfiles.Main;
 import me.azazeldev.gndfiles.gndmain.types.Clickable;
+import me.azazeldev.gndfiles.gndmain.types.Instance;
 import me.azazeldev.gndfiles.gndmain.types.Node;
 import me.azazeldev.gndfiles.gndmain.types.Scrollable;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import java.util.*;
 
 public class Parser {
     public static Map<String, String> variables = new HashMap<>();
+    public static List<Node> actionables = new ArrayList<>();
     public static Map<Node, Map<Integer, String>> replacedProperties = new HashMap<>();
 
     // Initially parse a full file
@@ -87,9 +89,14 @@ public class Parser {
                 break;
             case "@":
                 node = Scrollable.parse(nodeName, properties);
+                actionables.add(node);
                 break;
             case "!":
                 node = Clickable.parse(nodeName, properties);
+                actionables.add(node);
+                break;
+            case ">":
+                node = Instance.parse(nodeName, properties);
                 break;
         }
         for (Map.Entry<Integer, String> entry : tempReplaced.entrySet()) {
@@ -97,7 +104,7 @@ public class Parser {
             newMap.put(entry.getKey(), entry.getValue());
             replacedProperties.put(node, newMap);
         }
-        Main.l.info(node);
+        if (Main.test) Main.l.info(node);
         return node;
     }
 
@@ -105,7 +112,7 @@ public class Parser {
         if (variables.containsKey(variable)) {
             variables.replace(variable, value);
         } else {
-            System.out.println("Not a valid variable to replace");
+            Main.l.info("Not a valid variable to replace");
         }
     }
 
@@ -116,7 +123,7 @@ public class Parser {
             for (Map.Entry<Integer, String> propertyEntry : properties.entrySet()) {
                 Integer propertyKey = propertyEntry.getKey();
                 String propertyValue = propertyEntry.getValue();
-                Main.l.info(node.toString() + "; rep: " + propertyKey.toString() + " W " + propertyValue);
+                if (Main.test) Main.l.info(node.toString() + "; rep: " + propertyKey.toString() + " W " + propertyValue);
                 node.replaceProperty(propertyKey, propertyValue);
             }
         }

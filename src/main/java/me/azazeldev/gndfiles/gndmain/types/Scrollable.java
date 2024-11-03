@@ -22,6 +22,6 @@ public class Scrollable extends Node {
     }
 
     public String toString() {
-        return "Scrollable{name='" + this.name + '\'' + ", x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height=" + this.height + ", color=" + this.color + ", radius=" + this.radius + ", scrollDir=" + this.scrollDir+ ", scrollProgress=" + this.scrollProgress + ", isChild=" + isChild() + ", children=" + this.children + '}';
+        return "Scrollable{name='" + this.name + '\'' + ", x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height=" + this.height + ", color=" + this.color + ", radius=" + this.radius + ", scrollDir=" + this.scrollDir+ ", scrollProgress=" + this.scrollProgress + ", isChild=" + isChild() + ", children=" + this.children + "}";
     }
 }

@@ -44,6 +44,6 @@ public class Clickable extends Node {
     }
 
     public String toString() {
-        return "Clickable{name='" + this.name + '\'' + ", x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height=" + this.height + ", color=" + this.color + ", radius=" + this.radius + ", methodName=" + this.methodName + ", methodArgs=" + this.methodArgs + ", isChild=" + isChild() + ", children=" + this.children + '}';
+        return "Clickable{name='" + this.name + '\'' + ", x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height=" + this.height + ", color=" + this.color + ", radius=" + this.radius + ", methodName=" + this.methodName + ", methodArgs=" + this.methodArgs + ", isChild=" + isChild() + ", children=" + this.children + "}";
     }
 }

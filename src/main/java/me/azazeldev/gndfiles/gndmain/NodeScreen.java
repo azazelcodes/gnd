@@ -7,7 +7,6 @@ import me.azazeldev.gndfiles.Main;
 import me.azazeldev.gndfiles.gndmain.types.Clickable;
 import me.azazeldev.gndfiles.gndmain.types.Node;
 import me.azazeldev.gndfiles.gndmain.types.Scrollable;
-import me.azazeldev.gndfiles.gui.MConfig;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.LWJGLException;
@@ -51,7 +50,7 @@ public class NodeScreen extends GuiScreen {
 
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        for (Node a : Drawer.actionables) {
+        for (Node a : Parser.actionables) {
             if (a.intersects(mx, my)) {
                 if (a instanceof Scrollable) {
                     int wheelState = Mouse.getEventDWheel();

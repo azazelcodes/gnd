@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = "gndex", useMetadata = true)
 public class Main {
     public static Main instance;
+    public static String mpath;
     public static Command commandManager = new Command();
     public static Logger l;
     public static Map<String, Node> nodeMap;
@@ -31,6 +32,7 @@ public class Main {
         l = LogManager.getLogger();
         progressBar.step("Setting up GUI...");
         MConfig.init();
+        mpath = MConfig.mpath;
         nodeMap = Parser.parseFile(MConfig.mconfig);
         ClientCommandHandler.instance.registerCommand(commandManager);
         ProgressManager.pop(progressBar);

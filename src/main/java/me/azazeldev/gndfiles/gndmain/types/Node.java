@@ -27,6 +27,13 @@ public class Node {
         this.parent = null;
     }
 
+    // For Special Node types like Instance which don't take defined width and height.
+    // Children and parent are needed, otherwise causing a crash with the Drawer.
+    public Node() {
+        this.children = new ArrayList<>();
+        this.parent = null;
+    }
+
     public void addChild(Node child) {
         child.parent = this;
         this.children.add(child);
@@ -81,6 +88,6 @@ public class Node {
     }
 
     public String toString() {
-        return "Node{name='" + this.name + '\'' + ", x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height=" + this.height + ", color=" + this.color + ", radius=" + this.radius + ", isChild=" + isChild() + ", children=" + this.children + '}';
+        return "Node{name='" + this.name + '\'' + ", x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height=" + this.height + ", color=" + this.color + ", radius=" + this.radius + ", isChild=" + isChild() + ", children=" + this.children + "}";
     }
 }
