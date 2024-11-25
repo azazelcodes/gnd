@@ -16,7 +16,7 @@ import java.util.*;
 public class Parser {
     public static Map<String, String> variables = new HashMap<>();
     public static List<Node> actionables = new ArrayList<>();
-    public static Map<Node, Map<Integer, String>> replacedProperties = new HashMap<>();
+    public static Map<Node, Map<Map<String, Integer>, String>> replacedProperties = new HashMap<>();
 
     // Initially parse a full file
     public static Map<String, Node> parseFile(File file) throws IOException {
@@ -61,17 +61,20 @@ public class Parser {
     private static Node getLine(String line, String nodeName) {
         // Parse properties
         String[] properties = line.substring(line.indexOf('(') + 1, line.indexOf(')')).split(", ");
-        Map<Integer, String> tempReplaced = new HashMap<>();
+        Map<Map<String, Integer>, String> tempReplaced = new HashMap<>();
         int i = 0;
         for (String property : properties) {
             // Check for variable
             if (property.contains("$")) {
                 int csIndex = Math.min(line.indexOf(',', line.indexOf(property)), line.indexOf(' ', line.indexOf(property)));
                 // Gets assigned variable value of the string between $ and , or ' ' (= var name)
-                String targetVar = variables.get(line.substring(line.indexOf('$') + 1, (csIndex == -1) ? line.length() : csIndex).replaceFirst("$", ""));
+                String targetKey = line.substring(line.indexOf('$') + 1, (csIndex == -1) ? line.length() : csIndex).replaceFirst("$", "");
+                String targetVar = variables.get(targetKey);
                 // Weird thang (Only replacing it once cuz error + incorrect counting)
                 line = StringUtils.replaceOnce(line, property, targetVar);
-                tempReplaced.put(i, targetVar);
+                Map<String, Integer> repmap = new LinkedHashMap<>();
+                repmap.put(targetKey, i);
+                tempReplaced.put(repmap, targetVar);
             }
             i++;
         }
@@ -99,8 +102,8 @@ public class Parser {
                 node = Instance.parse(nodeName, properties);
                 break;
         }
-        for (Map.Entry<Integer, String> entry : tempReplaced.entrySet()) {
-            Map<Integer, String> newMap = new HashMap<>();
+        for (Map.Entry<Map<String, Integer>, String> entry : tempReplaced.entrySet()) {
+            Map<Map<String, Integer>, String> newMap = new HashMap<>();
             newMap.put(entry.getKey(), entry.getValue());
             replacedProperties.put(node, newMap);
         }
@@ -111,20 +114,27 @@ public class Parser {
     public static void setVariable(String variable, String value) {
         if (variables.containsKey(variable)) {
             variables.replace(variable, value);
+            Main.l.info(variables);
         } else {
-            Main.l.info("Not a valid variable to replace");
+            Main.l.info(variable + " is not a valid variable to replace");
         }
     }
 
     public static void reparseVariables() {
-        for (Map.Entry<Node, Map<Integer, String>> nodeEntry : replacedProperties.entrySet()) {
+        for (Map.Entry<Node, Map<Map<String, Integer>, String>> nodeEntry : replacedProperties.entrySet()) {
             Node node = nodeEntry.getKey();
-            Map<Integer, String> properties = nodeEntry.getValue();
-            for (Map.Entry<Integer, String> propertyEntry : properties.entrySet()) {
-                Integer propertyKey = propertyEntry.getKey();
-                String propertyValue = propertyEntry.getValue();
-                if (Main.test) Main.l.info(node.toString() + "; rep: " + propertyKey.toString() + " W " + propertyValue);
-                node.replaceProperty(propertyKey, propertyValue);
+            Map<Map<String, Integer>, String> properties = nodeEntry.getValue();
+            for (Map.Entry<Map<String, Integer>, String> propertyEntry : properties.entrySet()) {
+                String varname = (String) propertyEntry.getKey().keySet().toArray()[0];
+                if (Main.test) Main.l.info(variables.toString());
+                if (variables.containsKey(varname)) {
+                    Integer propertyKey = (Integer) propertyEntry.getKey().values().toArray()[0];
+                    String propertyValue = variables.get(varname);
+                    if (Main.test) Main.l.info(node.toString() + "; rep: " + varname + "(" + propertyKey.toString() + ")" + " W " + propertyValue);
+                    node.replaceProperty(propertyKey, propertyValue);
+                } else {
+                    Main.l.info("The map contains the variable name " + varname + " even though it is not a valid variable!");
+                }
             }
         }
     }
